@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Plugin.Services;
 using ECommons.Automation;
 using ECommons.DalamudServices;
-using FFXIVClientStructs.FFXIV.Component.GUI;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using InventoryType = FFXIVClientStructs.FFXIV.Client.Game.InventoryType;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 
-namespace Snowfall;
+namespace Snowfall.Service;
 
-public unsafe class MenuGuiService
+public unsafe class MassMateriaRetrievalService
 {
-    private static IContextMenu? ContextMenu;
     private static IPluginLog? Logger;
     private static bool IsProcessing;
     private static DateTime LastAction = DateTime.MinValue;
@@ -23,48 +21,23 @@ public unsafe class MenuGuiService
     private static uint OwnerAddonId;
     private static MenuTargetInventory? CurrentTarget;
 
-    public static void Init(IContextMenu contextMenu, IPluginLog logger)
+    public static void Init(IPluginLog logger)
     {
-        ContextMenu = contextMenu;
-        Logger = logger;
-        ContextMenu.OnMenuOpened += AddMenu;
+        Logger = logger; 
         Svc.Framework.Update += OnUpdate;
     }
 
-    private static void AddMenu(IMenuOpenedArgs args)
+    public static void Start(
+        InventoryType targetContainer, int targetSlot, uint ownerAddonId, MenuTargetInventory? currentTarget = null)
     {
-        if (args.MenuType != ContextMenuType.Inventory) return;
+        TargetContainer = targetContainer;
+        TargetSlot = targetSlot;
+        OwnerAddonId = ownerAddonId;
+        CurrentTarget = currentTarget;
 
-        var inventoryTarget = (MenuTargetInventory)args.Target;
-        if (inventoryTarget.TargetItem is null) return;
-
-        var item = inventoryTarget.TargetItem.Value;
-
-        var hasMateria = item.MateriaEntries.Any(m => m.Type.RowId != 0 && !m.Type.Value.Item[0].Value.Name.IsEmpty);
-        if (!hasMateria) return;
-
-        args.AddMenuItem(new MenuItem
-        {
-            Name = "Retrieve All Materia",
-            PrefixChar = 'M',
-            PrefixColor = 510,
-            OnClicked = _ =>
-            {
-                Logger?.Info("Starting Bulk Retrieval...");
-                CurrentTarget = inventoryTarget;
-
-                TargetContainer = (InventoryType)inventoryTarget.TargetItem.Value.ContainerType;
-                TargetSlot = (int)inventoryTarget.TargetItem.Value.InventorySlot;
-
-                var agent = AgentContext.Instance();
-                OwnerAddonId = agent != null ? agent->OwnerAddon : 0;
-
-                IsProcessing = true;
-                LastAction = DateTime.MinValue;
-            }
-        });
+        IsProcessing = true;
     }
-
+    
     private static void OnUpdate(IFramework framework)
     {
         if (!IsProcessing || CurrentTarget == null) return;
@@ -147,8 +120,9 @@ public unsafe class MenuGuiService
         {
             var atkValue = addon->AtkValues[i];
 
-            if (atkValue.Type == FFXIVClientStructs.FFXIV.Component.GUI.ValueType.String ||
-                atkValue.Type == FFXIVClientStructs.FFXIV.Component.GUI.ValueType.ManagedString)
+            if (atkValue.Type 
+                is FFXIVClientStructs.FFXIV.Component.GUI.ValueType.String 
+                or FFXIVClientStructs.FFXIV.Component.GUI.ValueType.ManagedString)
             {
                 byte* textPtr = atkValue.String;
                 if (textPtr == null) continue;
@@ -178,10 +152,10 @@ public unsafe class MenuGuiService
                name.Contains("Materia zurückgewinnen") ||
                name.Contains("Retirer des matérias");
     }
-
+    
     public static void Dispose()
     {
-        if (ContextMenu != null) ContextMenu.OnMenuOpened -= AddMenu;
+        IsProcessing = false;
         Svc.Framework.Update -= OnUpdate;
     }
 }

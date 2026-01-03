@@ -5,6 +5,7 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
+using Snowfall.Service;
 using Snowfall.Windows;
 
 namespace Snowfall;
@@ -55,14 +56,12 @@ public sealed class Plugin : IDalamudPlugin
 
         // Adds another button doing the same but for the main ui of the plugin
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUi;
-
-        // Add a simple message to the log with level set to information
-        // Use /xllog to open the log window in-game
-        // Example Output: 00:57:54.959 | INF | [Snowfall] ===A cool log message from Sample Plugin===
-        Log.Information($"===A cool log message from {PluginInterface.Manifest.Name}===");
+        
+        Log.Information($"Snowfall Initialized");
 
         ECommonsMain.Init(pluginInterface, this);
         MenuGuiService.Init(ContextMenu, Log);
+        MassMateriaRetrievalService.Init(Log);
     }
 
     public void Dispose()
@@ -78,6 +77,7 @@ public sealed class Plugin : IDalamudPlugin
         MainWindow.Dispose();
         
         MenuGuiService.Dispose();
+        MassMateriaRetrievalService.Dispose();
 
         CommandManager.RemoveHandler(CommandName);
     }
