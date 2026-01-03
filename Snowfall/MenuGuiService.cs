@@ -88,15 +88,6 @@ public unsafe class MenuGuiService
             var addon = (AtkUnitBase*)retrievePtr.Address;
             if (addon->IsVisible)
             {
-                // Verify if item is empty
-                if (addon->AtkValuesCount > 1 && addon->AtkValues[1].Int == 0)
-                {
-                    Logger?.Debug("Item is now empty. Closing window.");
-                    Callback.Fire(addon, true, -1);
-                    IsProcessing = false;
-                    return;
-                }
-
                 Logger?.Debug("Attempting to press 'Begin'...");
                     
                 Callback.Fire(addon, true, 0);
