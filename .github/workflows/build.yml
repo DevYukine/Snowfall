@@ -1,27 +1,26 @@
-name: Sample PR Builder for SamplePlugin
+name: Build Commit
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
 
   build:
     runs-on: windows-2022
-
     env:
-      Solution_Name: SamplePlugin
+      Solution_Name: Snowfall
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v5
+    - name: Checkout Source code
+      uses: actions/checkout@v6
 
     - name: Install .NET
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
 
-    - name: Download Dalamud
+    - name: Download & Setup Dalamud
       run: |
         Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
         Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
@@ -29,11 +28,9 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
-    - name: Store artifacts
-      uses: actions/upload-artifact@v4
+    - name: Push artifacts
+      uses: actions/upload-artifact@v6
       with:
-        name: SamplePlugin
-        path: .\SamplePlugin\bin\x64\Release\SamplePlugin\*
+        name: Snowfall
+        path: .\Snowfall\bin\x64\Release\Snowfall\*
         if-no-files-found: error
-        retention-days: 1
-
