@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -7,7 +7,7 @@ using InventoryType = FFXIVClientStructs.FFXIV.Client.Game.InventoryType;
 
 namespace Snowfall;
 
-public unsafe class MenuGuiService
+public static unsafe class MenuGuiService
 {
     private static IContextMenu? ContextMenu;
     private static IPluginLog? Logger;

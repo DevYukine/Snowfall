@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Plugin.Services;
@@ -10,7 +10,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace Snowfall.Service;
 
-public unsafe class MassMateriaRetrievalService
+public static unsafe class MassMateriaRetrievalService
 {
     private static IPluginLog? Logger;
     private static bool IsProcessing;
