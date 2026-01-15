@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;

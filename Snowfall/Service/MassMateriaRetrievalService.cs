@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Plugin.Services;
@@ -95,7 +95,7 @@ public static unsafe class MassMateriaRetrievalService
         }
 
         var contextMenu = (AtkUnitBase*)contextMenuPtr.Address;
-        int index = GetRetrieveMateriaIndex();
+        var index = GetRetrieveMateriaIndex();
         if (index != -1)
         {
             Logger?.Debug($"Clicking 'Retrieve Materia' at index {index}");
@@ -127,7 +127,7 @@ public static unsafe class MassMateriaRetrievalService
                 byte* textPtr = atkValue.String;
                 if (textPtr == null) continue;
 
-                string name = Marshal.PtrToStringUTF8((nint)textPtr) ?? "";
+                var name = Marshal.PtrToStringUTF8((nint)textPtr) ?? "";
 
                 if (IsRetrieveMateriaString(name))
                 {

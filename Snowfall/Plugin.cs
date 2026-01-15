@@ -46,19 +46,19 @@ public sealed class Plugin : IDalamudPlugin
 
         // Tell the UI system that we want our windows to be drawn through the window system
         PluginInterface.UiBuilder.Draw += WindowSystem.Draw;
-
         // This adds a button to the plugin installer entry of this plugin which allows
         // toggling the display status of the configuration ui
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUi;
-
         // Adds another button doing the same but for the main ui of the plugin
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUi;
         
-        Log.Information($"Snowfall Initialized");
+        Log.Debug($"Snowfall Starting up...");
 
         ECommonsMain.Init(pluginInterface, this);
         MenuGuiService.Init(ContextMenu, Log);
         MassMateriaRetrievalService.Init(Log);
+        
+        Log.Information($"Snowfall Initialized");
     }
 
     public void Dispose()
