@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ECommons" Version="3.1.0.12" />
+    <PackageReference Include="ECommons" Version="3.1.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="obj\x64\Debug\icon.png" />
   </ItemGroup>
 </Project>
