@@ -21,7 +21,7 @@ public sealed class Plugin : IDalamudPlugin
     [PluginService] internal static IPluginLog Log { get; private set; } = null!;
     [PluginService] public static IContextMenu ContextMenu { get; private set; } = null!;
 
-    private const string CommandName = "/pmycommand";
+    private const string CommandName = "/snw";
 
     public Configuration Configuration { get; init; }
 
@@ -41,7 +41,7 @@ public sealed class Plugin : IDalamudPlugin
 
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "A useful message to display in /xlhelp"
+            HelpMessage = "Show Snowfalls configuration window."
         });
 
         // Tell the UI system that we want our windows to be drawn through the window system
