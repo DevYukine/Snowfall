@@ -2,12 +2,13 @@
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using Snowfall.Abstraction;
 using Snowfall.Service;
 using InventoryType = FFXIVClientStructs.FFXIV.Client.Game.InventoryType;
 
 namespace Snowfall;
 
-public static unsafe class MenuGuiService
+public abstract unsafe class MenuGuiService : IStaticDisposable
 {
     private static IContextMenu? ContextMenu;
     private static IPluginLog? Logger;

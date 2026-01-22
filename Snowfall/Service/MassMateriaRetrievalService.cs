@@ -7,10 +7,11 @@ using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using Snowfall.Abstraction;
 
 namespace Snowfall.Service;
 
-public static unsafe class MassMateriaRetrievalService
+public abstract unsafe class MassMateriaRetrievalService : IStaticDisposable
 {
     private static IPluginLog? Logger;
     private static bool IsProcessing;
